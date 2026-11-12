@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Sửa' if editing else 'Thêm' }} danh mục{% endblock %}
+{% block content %}
+<h1>{{ 'Sửa danh mục' if editing else 'Thêm danh mục' }}</h1>
+<section class="card narrow">
+  <form method="post">
+    <label>Tên danh mục *
+      <input type="text" name="name" value="{{ form.name }}" required autofocus>
+    </label>
+    <label>Mô tả
+      <textarea name="description" rows="3">{{ form.description }}</textarea>
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Lưu</button>
+      <a class="btn" href="{{ url_for('categories') }}">Hủy</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

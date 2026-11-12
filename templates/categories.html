@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Danh mục - Quản lý sách{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Danh mục sách</h1>
+  <a class="btn btn-primary" href="{{ url_for('category_add') }}">+ Thêm danh mục</a>
+</div>
+
+<section class="card">
+  {% if categories %}
+  <div class="table-wrap">
+  <table>
+    <tr><th>#</th><th>Tên danh mục</th><th>Mô tả</th><th class="r">Số đầu sách</th><th class="r">Thao tác</th></tr>
+    {% for c in categories %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td><a href="{{ url_for('books', category=c.id) }}"><strong>{{ c.name }}</strong></a></td>
+      <td>{{ c.description }}</td>
+      <td class="r">{{ c.book_count }}</td>
+      <td class="r actions">
+        <a class="btn btn-sm" href="{{ url_for('books', category=c.id) }}">Xem sách</a>
+        <a class="btn btn-sm" href="{{ url_for('category_edit', cid=c.id) }}">Sửa</a>
+        <form method="post" action="{{ url_for('category_delete', cid=c.id) }}" onsubmit="return confirm('Xóa danh mục &quot;{{ c.name }}&quot;?');">
+          <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}
+    <p class="muted">Chưa có danh mục nào. Hãy thêm danh mục đầu tiên.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Quản lý sách{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="{{ url_for('dashboard') }}">📚 Quản lý sách</a>
+      <nav>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+        <a href="{{ url_for('categories') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('categor') }}">Danh mục</a>
+        <a href="{{ url_for('books') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('book') }}">Sách</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

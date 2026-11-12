@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Quản lý sách{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats">
+  <div class="stat"><span class="label">Danh mục</span><span class="num">{{ total_categories }}</span></div>
+  <div class="stat"><span class="label">Đầu sách</span><span class="num">{{ total_books }}</span></div>
+  <div class="stat"><span class="label">Tổng số cuốn</span><span class="num">{{ total_quantity }}</span></div>
+  <div class="stat"><span class="label">Giá trị tồn kho</span><span class="num small">{{ total_value | money }}</span></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <div class="card-head">
+      <h2>Sách theo danh mục</h2>
+      <a class="btn btn-sm" href="{{ url_for('categories') }}">Quản lý danh mục</a>
+    </div>
+    {% if per_category %}
+      {% for r in per_category %}
+      <a class="bar-row" href="{{ url_for('books', category=r.id) }}">
+        <span class="bar-name">{{ r.name }}</span>
+        <span class="bar-track"><span class="bar-fill" style="width: {{ (r.book_count / max_count * 100) | round | int }}%"></span></span>
+        <span class="bar-val">{{ r.book_count }} đầu sách · {{ r.qty }} cuốn</span>
+      </a>
+      {% endfor %}
+    {% else %}
+      <p class="muted">Chưa có danh mục nào.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Sắp hết hàng (≤ 5 cuốn)</h2>
+    </div>
+    {% if low_stock %}
+    <table>
+      <tr><th>Tên sách</th><th>Danh mục</th><th class="r">SL</th></tr>
+      {% for b in low_stock %}
+      <tr>
+        <td><a href="{{ url_for('book_edit', bid=b.id) }}">{{ b.title }}</a></td>
+        <td>{{ b.category_name }}</td>
+        <td class="r"><span class="badge warn">{{ b.quantity }}</span></td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p class="muted">Không có sách nào sắp hết.</p>
+    {% endif %}
+  </section>
+</div>
+
+<section class="card">
+  <div class="card-head">
+    <h2>Sách thêm gần đây</h2>
+    <a class="btn btn-sm btn-primary" href="{{ url_for('book_add') }}">+ Thêm sách</a>
+  </div>
+  {% if recent %}
+  <div class="table-wrap">
+  <table>
+    <tr><th>Tên sách</th><th>Tác giả</th><th>Danh mục</th><th class="r">Giá</th><th class="r">SL</th></tr>
+    {% for b in recent %}
+    <tr>
+      <td>{{ b.title }}</td>
+      <td>{{ b.author }}</td>
+      <td>{{ b.category_name }}</td>
+      <td class="r">{{ b.price | money }}</td>
+      <td class="r">{{ b.quantity }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}
+    <p class="muted">Chưa có sách nào.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Sửa' if editing else 'Thêm' }} sách{% endblock %}
+{% block content %}
+<h1>{{ 'Sửa sách' if editing else 'Thêm sách' }}</h1>
+<section class="card narrow">
+  <form method="post">
+    <label>Danh mục *
+      <select name="category_id" required>
+        <option value="">-- Chọn danh mục --</option>
+        {% for c in categories %}
+        <option value="{{ c.id }}" {{ 'selected' if form.category_id|string == c.id|string }}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Tên sách *
+      <input type="text" name="title" value="{{ form.title }}" required>
+    </label>
+    <label>Tác giả *
+      <input type="text" name="author" value="{{ form.author }}" required>
+    </label>
+    <div class="row3">
+      <label>Giá (đ) *
+        <input type="number" name="price" min="0" value="{{ form.price }}" required>
+      </label>
+      <label>Số lượng *
+        <input type="number" name="quantity" min="0" value="{{ form.quantity }}" required>
+      </label>
+      <label>Năm xuất bản
+        <input type="number" name="year" min="1000" max="2100" value="{{ form.year }}">
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Lưu</button>
+      <a class="btn" href="{{ url_for('books') }}">Hủy</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
